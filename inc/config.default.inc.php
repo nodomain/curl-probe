@@ -12,6 +12,8 @@ $replyto = "mail@".$hostname;
 
 $maxreplychars = 2048;
 
+$version = "3.0";
+
 $timeformat = "y/m/d H:i T";
 
 // quiet mode settings
