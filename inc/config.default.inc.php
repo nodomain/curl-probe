@@ -12,12 +12,6 @@ $replyto = "mail@".$hostname;
 
 $maxreplychars = 2048;
 
-$revision = '$Rev: 31 $';
-$date     = '$Date: 2009-11-11 23:14:31 +0000 (Wed, 11 Nov 2009) $';
-
-$version  = "2.3." . substr($revision, 6, -2);
-$build = substr($date, 7, 10);
-
 $timeformat = "y/m/d H:i T";
 
 // quiet mode settings

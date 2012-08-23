@@ -10,7 +10,7 @@ if (isset($_SESSION['user'])) {
 }
 ?>
 <hr />
-<a href="mailto:<?=$contact?>">contact</a> | version: <?=$version?> build: <?=$build?> | curl probe is free software - see <a href="http://code.google.com/p/curl-probe/" target="_blank">Google Code</a> for details
+<a href="mailto:<?=$contact?>">contact</a> | curl probe is free software - see <a href="https://github.com/nodomain/curl-probe" target="_blank">Github</a> for details
 <div id="message"></div>
 <hr />
 </div>
