@@ -348,6 +348,18 @@ class database {
       return mysql_insert_id();
     }
   }
+
+  public function getProbeResponse($id) {
+    $sql = "SELECT * FROM events WHERE id = ".intval($id);
+    $this->result = $this->db->query($sql);
+    if(DB::isError($this->result)) {
+      throw new Exception($this->result->getMessage());
+    } else {
+      $row = $this->result->fetchrow(DB_FETCHMODE_ASSOC);                                                   
+      return $row;
+    }
+  }
+
   
 }
 ?>

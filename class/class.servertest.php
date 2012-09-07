@@ -7,14 +7,15 @@ class serverTest {
   private $findstring = "";
   private $result = "";
   private $status = "";
-  private $curl = "";
+  private $request = "";
+  private $response = "";
   private $benchmark = "";
   private $version = "";
   private $hostname = "";
   
   public function __construct($title = "", $server = "") {
   // get neccessary PEAR classes
-    require_once('Net/Curl.php');
+    require_once('HTTP/Request2.php');
     require_once('Benchmark/Timer.php');
     $this->title = $title;
     $this->server = $server;
@@ -44,33 +45,32 @@ class serverTest {
   // serverTest function: checks if servertest response is $findstring, 
   // otherwise mails with error messages will be sent
   public function test() {
-    $this->curl = new Net_Curl($this->server);     
-    
-    // create object
-    //$curl = new Net_Curl($server.'/servertest/'); 
+    $this->request = new HTTP_Request2($this->server);     
   
     // set user agent
-    $this->curl->userAgent = 'Curl-Probe/'. $this->version . " " . $this->title; //. ' ('.$hostname.')';
-    
-    // set timeout of 30 seconds
-    $this->curl->timeout = 30;
+    $this->request->setHeader("User-Agent: Curl-Probe/". $this->version . " " . $this->title);
+
+    $this->request->setConfig(array(
+	'ssl_verify_peer'   => FALSE,
+        'ssl_verify_host'   => FALSE
+        ));
 
     // execute and close
     $this->benchmark->start();
-    $this->result = $this->curl->execute();
+    $this->response = $this->request->send();
+    $this->result = $this->response->getBody();
     $this->benchmark->stop();
-    
-    if (false === PEAR::isError($this->result)) {    
+
+    if ($this->response->getStatus() == 200) {
       if (stristr($this->result, $this->findstring) === FALSE) {
         $this->status = false;
       } else {
         $this->status = true;
       }
     } else {
-      $this->status = false;
-      $this->result = $this->result->getMessage();
+      $this->status = false;      
+      $this->result = $this->response->getReasonPhrase() ."\n".$this->response->getBody();
     }
-    $this->curl->close(); 
   }
 }
 ?>

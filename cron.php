@@ -29,7 +29,7 @@ try {
       // test again to make sure we really have a problem and avoid accidental mails
       if ($sTest->getStatus() == false) {      
         $random = rand(1, 10);
-        print (" ... trying again in ".$random." seconds\n");
+        print (" ... trying again in ".$random." seconds to ensure we really have a problem\n");
         sleep($random);
         $sTest->test();
       }
