@@ -21,6 +21,7 @@ try {
       $mystatus = false;
       $sTest->setTitle($server['name']);
       $sTest->setServer($server['url']);
+      $sTest->setHost($server['host']);
       $sTest->setFindstring($server['findstring']);
       $sTest->setVersion($version);
       $sTest->setHostname($hostname);

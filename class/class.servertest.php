@@ -3,6 +3,7 @@
 class serverTest {
 
   private $server = "";
+  private $host = "";
   private $title = "";
   private $findstring = "";
   private $result = "";
@@ -49,6 +50,11 @@ class serverTest {
   
     // set user agent
     $this->request->setHeader("User-Agent: Curl-Probe/". $this->version . " " . $this->title);
+
+    // set optional host header
+    if (!empty($this->host)) {
+        $this->request->setHeader("Host: ". $this->host);
+    }
 
     $this->request->setConfig(array(
 	'ssl_verify_peer'   => FALSE,

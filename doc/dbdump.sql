@@ -40,6 +40,7 @@ CREATE TABLE `servers` (
   `id` bigint(20) unsigned NOT NULL auto_increment,
   `name` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
+  `host` varchar(255) NULL,
   `check` tinyint(1) NOT NULL default '1',
   `findstring` varchar(255) NOT NULL,
   `checkinterval` int(10) unsigned NOT NULL default '5',

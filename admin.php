@@ -138,6 +138,8 @@ function editProbe() {
     print("<input type=\"text\" size=\"50\" name=\"name\" id=\"name\" value=\"".$probe['name']."\" /><br />\n");
     print("<label for=\"url\">URL</label><br />\n");
     print("<input type=\"text\" size=\"50\" name=\"url\" id=\"url\" value=\"".$probe['url']."\" /><br />\n");
+    print("<label for=\"host\">Optional: Host</label><br />\n");
+    print("<input type=\"text\" size=\"50\" name=\"host\" id=\"host\" value=\"".$probe['host']."\" /><br />\n");
     print("<label for=\"findstring\">Look for</label><br />\n");
     print("<input type=\"text\" size=\"50\" name=\"findstring\" id=\"findstring\" value=\"".$probe['findstring']."\" /><br />\n");
     print("<label for=\"checkinterval\">Check interval (minutes)</label><br />\n");
@@ -191,7 +193,7 @@ function editProbe() {
       
       print("</form><br />");
   } else {
-    $result = $_SESSION['db']->setProbeData($_SESSION['probeid'], trim($_POST['name']), trim($_POST['url']), trim($_POST['findstring']), trim($_POST['check']), trim($_POST['checkinterval']));
+    $result = $_SESSION['db']->setProbeData($_SESSION['probeid'], trim($_POST['name']), trim($_POST['url']), trim($_POST['host']), trim($_POST['findstring']), trim($_POST['check']), trim($_POST['checkinterval']));
     if ($result) {
       listProbes();
     }
@@ -236,6 +238,8 @@ function addProbe() {
     print("<input type=\"text\" size=\"50\" name=\"name\" id=\"name\" /><br />\n");
     print("<label for=\"url\">URL</label><br />\n");
     print("<input type=\"text\" size=\"50\" name=\"url\" id=\"url\" /><br />\n");
+    print("<label for=\"host\">Optional: Host</label><br />\n");
+    print("<input type=\"text\" size=\"50\" name=\"host\" id=\"host\" /><br />\n");
     print("<label for=\"findstring\">Look for</label><br />\n");
     print("<input type=\"text\" size=\"50\" name=\"findstring\" id=\"findstring\" /><br />\n");
     print("<label for=\"checkinterval\">Check interval (minutes)</label><br />\n");
@@ -243,7 +247,7 @@ function addProbe() {
     print("<input type=\"submit\" name=\"submit\" id=\"submit\" value=\"Save settings\" /><br />\n");
     print("</form>\n");
   } else {
-    $result = $_SESSION['db']->addProbe(trim($_POST['name']), trim($_POST['url']), trim($_POST['findstring']), trim($_POST['checkinterval']), trim($_POST['check']));
+    $result = $_SESSION['db']->addProbe(trim($_POST['name']), trim($_POST['url']), trim($_POST['host']), trim($_POST['findstring']), trim($_POST['checkinterval']), trim($_POST['check']));
     if ($result) {
       $_SESSION['probeid'] = $result;
       // add current user as responsible

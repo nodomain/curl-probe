@@ -233,13 +233,13 @@ class database {
     }
   }
 
-  public function setProbeData($id, $name, $url, $findstring, $check, $checkinterval) {
+  public function setProbeData($id, $name, $url, $host, $findstring, $check, $checkinterval) {
     if ($check == "check") {
       $check = 1;
     } else {
       $check = 0;
     }
-    $sql = "UPDATE servers SET `name` = '".$name."', `url` = '".$url."', `findstring` = '".$findstring."', `check` = '".$check."', `checkinterval` = ".intval($checkinterval)." WHERE id = ".intval($id);
+    $sql = "UPDATE servers SET `name` = '".$name."', `url` = '".$url."', `host` = '".$host."',`findstring` = '".$findstring."', `check` = '".$check."', `checkinterval` = ".intval($checkinterval)." WHERE id = ".intval($id);
     $this->result = $this->db->query($sql);
     if(DB::isError($this->result)) {
       throw new Exception($this->result->getMessage());
@@ -270,9 +270,9 @@ class database {
     }
   }
 
-  public function addProbe($name, $url, $findstring, $checkinterval, $check) {
+  public function addProbe($name, $url, $host, $findstring, $checkinterval, $check) {
     if ($this->getProbeID($name, $url, $findstring) == 0) {
-      $sql = "INSERT INTO `servers` (`name`, `url`, `findstring`, `checkinterval`, `check`) VALUES ('".mysql_real_escape_string($name). "', '" .mysql_real_escape_string($url)."', '".mysql_real_escape_string($findstring)."',".intval($checkinterval).", ".intval($check).")";
+      $sql = "INSERT INTO `servers` (`name`, `url`, `host`, `findstring`, `checkinterval`, `check`) VALUES ('".mysql_real_escape_string($name). "', '" .mysql_real_escape_string($url)."', '" .mysql_real_escape_string($host)."', '".mysql_real_escape_string($findstring)."',".intval($checkinterval).", ".intval($check).")";
       $this->result = $this->db->query($sql);
       if(DB::isError($this->result)) {
         throw new Exception($this->result->getMessage());
