@@ -26,14 +26,19 @@ if (flock($fp, LOCK_EX | LOCK_NB)) { // do an exclusive lock
         $sTest->setFindstring($server['findstring']);
         $sTest->setVersion($version);
         $sTest->setHostname($hostname);
-        $sTest->test();
-        
-        // test again to make sure we really have a problem and avoid accidental mails
-        if ($sTest->getStatus() == false) {
-          $random = rand(1, 15);
-          print(" ... trying again in " . $random . " seconds to ensure we really have a problem\n");
-          sleep($random);
+	
+	try {
           $sTest->test();
+          // test again to make sure we really have a problem and avoid accidental mails
+          if ($sTest->getStatus() == false) {
+            $random = rand(1, 15);
+            print(" ... trying again in " . $random . " seconds to ensure we really have a problem\n");
+            sleep($random);
+            $sTest->test();
+          }
+        }
+        catch (Exception $ex) {
+          print("Exception occured for probe '" . $sTest->getTitle() . "': " . $ex->getMessage() . "\n");
         }
         
         if ($sTest->getStatus() == false) {
