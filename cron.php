@@ -1,4 +1,4 @@
-#!/home/nodomain/bin/php
+#!/package/host/localhost/php-5/bin/php
 <?php
 include_once('inc/config.default.inc.php');
 require_once('class/class.servertest.php');
