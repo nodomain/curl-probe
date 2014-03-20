@@ -325,11 +325,11 @@ class database {
     }
   }
 
-  public function setUserData($id, $login, $realname, $email, $password, $twitteruser, $twitterpass, $admin, $jabberuser) {
+  public function setUserData($id, $login, $realname, $email, $password, $admin) {
     if ($password == "") {
-      $sql = "UPDATE users SET `login` = '".$login."', `realname` = '".$realname."', `email` = '".$email."', `twitteruser` = '".$twitteruser."', `twitterpass` = '".$twitterpass."', `admin` = ".$admin.", `jabberuser` = '".$jabberuser."' WHERE id = ".intval($id);
+      $sql = "UPDATE users SET `login` = '".$login."', `realname` = '".$realname."', `email` = '".$email."', `admin` = ".$admin." WHERE id = ".intval($id);
     } else {
-      $sql = "UPDATE users SET `login` = '".$login."', `realname` = '".$realname."', `email` = '".$email."', `twitteruser` = '".$twitteruser."', `twitterpass` = '".$twitterpass."', `admin` = ".$admin.", `jabberuser` = '".$jabberuser."', `password` = PASSWORD('".$password."') WHERE id = ".intval($id);
+      $sql = "UPDATE users SET `login` = '".$login."', `realname` = '".$realname."', `email` = '".$email."', `admin` = ".$admin.", `password` = PASSWORD('".$password."') WHERE id = ".intval($id);
     }
     $this->result = $this->db->query($sql);
     if(DB::isError($this->result)) {
@@ -355,7 +355,7 @@ class database {
     if(DB::isError($this->result)) {
       throw new Exception($this->result->getMessage());
     } else {
-      $row = $this->result->fetchrow(DB_FETCHMODE_ASSOC);                                                   
+      $row = $this->result->fetchrow(DB_FETCHMODE_ASSOC);
       return $row;
     }
   }

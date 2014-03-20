@@ -5,21 +5,15 @@ class user {
   private $name = "";
   private $email = "";
   private $userid = "";
-  private $twitteruser = "";
-  private $twitterpass = "";
   private $admin = false;
-  private $jabberuser = "";
-  
+
   public function __construct($name, $pass) {
     if ($_SESSION['db']->getUserID($name, $pass) <> 0) {
       $this->userid = $_SESSION['db']->getUserID($name, $pass);
       $res = $_SESSION['db']->getUserData($this->userid);
       $this->name = $res['realname'];
       $this->email = $res['email'];
-      $this->twitteruser = $res['twitteruser'];
-      $this->twitterpass = $res['twitterpass'];
       $this->admin = $res['admin'];
-      $this->jabberuser = $res['jabberuser'];
     } else {
       throw new Exception ("Invalid login - user not found");
     }

@@ -4,9 +4,7 @@ include_once('inc/config.default.inc.php');
 require_once('class/class.servertest.php');
 require_once('class/class.database.php');
 require_once('class/class.sendmail.php');
-require_once('class/class.twitter.php');
 require_once('class/class.shorturl.php');
-require_once('lib/XMPPHP/XMPP.php');
 
 $currentminute = date("i");
 //$currentminute = 5;
@@ -50,27 +48,6 @@ try {
           $responsible = $db->getAllResponsible($server['id']);
           if (isset($responsible)) {
             foreach ($responsible as $recipient) {
-	      // tweet it
-	      if ($recipient['twitteruser'] != '') {
-	        $gd = new shorturl($server['url']);
-		$shortUrl = $gd->getShortURL();
-	        $twitter = new Twitter($recipient['twitteruser'], $recipient['twitterpass']);
-                $twitterStatus = $twitter->send(date($timeformat) .": ".$server['name']. " (".$shortUrl.") has an error");	
-              }
-              // jabber it
-              if ($recipient['jabberuser'] != '') {
-                $conn = new XMPPHP_XMPP($jabberserver, $jabberport, $jabberuser, $jabberpass, $jabberressource, $jabberdomain, $printlog=false, $loglevel=XMPPHP_Log::LEVEL_INFO);
-                try {
-                  $conn->connect();
-                  $conn->processUntil('session_start');
-                  $conn->presence();
-                  $conn->message($recipient['jabberuser'], date($timeformat) .": ".$server['name']. " (".$shortUrl.") has an error. The server replied as follows: ".$sTest->getResult());
-                  $conn->disconnect();
-                } catch(XMPPHP_Exception $e) {
-                  print("XMPPHP Error: ". $e->getMessage());
-                }
-              }
-
               // mail it
               if ((strtotime($startquietmode) <= time()) && (time() <= strtotime($endquietmode))) {
                 echo "not sending mail because of quiet mode\n";
@@ -102,28 +79,6 @@ try {
           $responsible = $db->getAllResponsible($server['id']);
           if (isset($responsible)) {
             foreach ($responsible as $recipient) {
-      	      // tweet it
-              if ($recipient['twitteruser'] != '') {
-                $gd = new shorturl($server['url']);
-                $shortUrl = $gd->getShortURL();      
-                $twitter = new Twitter($recipient['twitteruser'], $recipient['twitterpass']);
-                $twitterStatus = $twitter->send(date($timeformat) .": ".$server['name']. " (".$shortUrl.") has recovered. It had been on error since ".date($timeformat, strtotime($logtime))." (".(round(abs(time() - strtotime($logtime)) / 60,1))." min).");
-              }
-
-              // jabber it
-              if ($recipient['jabberuser'] != '') {
-                $conn = new XMPPHP_XMPP($jabberserver, $jabberport, $jabberuser, $jabberpass, $jabberressource, $jabberdomain, $printlog=false, $loglevel=XMPPHP_Log::LEVEL_INFO);
-                try {
-                  $conn->connect();
-                  $conn->processUntil('session_start');
-                  $conn->presence();
-                  $conn->message($recipient['jabberuser'], date($timeformat) .": ".$server['name']. " (".$shortUrl.") has recovered. It had been on error since ".date($timeformat, strtotime($logtime))." (".(round(abs(time() - strtotime($logtime)) / 60,1))." minute(s)).");
-                  $conn->disconnect();
-                } catch(XMPPHP_Exception $e) {
-                  print("XMPPHP Error: ". $e->getMessage());
-                }
-              }
-
               // mail it
               if ((strtotime($startquietmode) <= time()) && (time() <= strtotime($endquietmode))) {
                 echo "not sending mail because of quiet mode\n";

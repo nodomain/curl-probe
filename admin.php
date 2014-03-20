@@ -158,11 +158,10 @@ function editProbe() {
 
     if (isset ($resp)) {
       print("<table summary=\"userlist\">");
-      print("<tr><th>Name</th><th>E-mail address</th><th>Twitter</th><th>Remove</th></tr>");
+      print("<tr><th>Name</th><th>E-mail address</th><th>Remove</th></tr>");
       foreach ($resp as $current) {
         print("<tr><td>".$current['realname']."</td>
-                   <td><a href=\"mailto:".$current['email']."\">".$current['email']."</a></td>
-                   <td><a href=\"http://twitter.com/".$current['twitteruser']."\" target=\"_blank\">".$current['twitteruser']."</a></td>");
+                   <td><a href=\"mailto:".$current['email']."\">".$current['email']."</a></td>");
         
         if (count($resp) > 1) {
           if ($_SESSION['user']->isUser() and $_SESSION['user']->getUserId() == $current['user_id']) {
@@ -293,15 +292,13 @@ function listUsers() {
     print("<a href=\"?a=adduser\">New User</a><br />");
     $users = $_SESSION['db']->getAllUserData();
     print("<table summary=\"users\">\n");
-    print("<tr><th>Login</th><th>Realname</th><th>E-Mail</th><th>Twitter</th><th>Jabber</th><th>Admin</th><th>Edit</th><th>Delete</th></tr>");
+    print("<tr><th>Login</th><th>Realname</th><th>E-Mail</th><th>Admin</th><th>Edit</th><th>Delete</th></tr>");
     foreach ($users as $user) {
       print("<tr>");
 
       print("<td>". htmlspecialchars($user['login']) ."</td>
              <td>". htmlspecialchars($user['realname']) ."</td>
        <td><a href=\"mailto:". $user['email'] ."\">".$user['email']."</a></td>
-       <td><a href=\"http://twitter.com/". $user['twitteruser'] ."\" target=\"_blank\">".$user['twitteruser']."</a></td>
-       <td>".$user['jabberuser']."</td>
        <td>".$user['admin']."</td>
        <td><a href=\"?a=edituser&amp;id=".$user['id']."\" title=\"edit user\"><img src=\"img/edit.png\" alt=\"edit\" /></a></td>");
        if ($_SESSION['user']->getUserid() <> $user['id']) {
@@ -342,15 +339,6 @@ function editUser() {
     print("<label for=\"email\">E-Mail</label><br />\n");
     print("<input type=\"text\" size=\"50\" name=\"email\" id=\"email\" value=\"".$user['email']."\" /><br />\n");
 
-    print("<label for=\"twitteruser\">Twitter user</label><br />\n");
-    print("<input type=\"text\" size=\"50\" name=\"twitteruser\" id=\"twitteruser\" value=\"".$user['twitteruser']."\" /><br />\n");
-
-    print("<label for=\"twitterpass\">Twitter password</label><br />\n");
-    print("<input type=\"password\" size=\"50\" name=\"twitterpass\" id=\"twitterpass\" value=\"".$user['twitterpass']."\" /><br />\n");
-
-    print("<label for=\"jabberuser\">Jabber account</label><br />\n");
-    print("<input type=\"text\" size=\"50\" name=\"jabberuser\" id=\"jabberuser\" value=\"".$user['jabberuser']."\" /><br />\n");
-
     if ($_SESSION['db']->isAdminUser($_SESSION['user']->getUserid()) == 1) {
       print("<label for=\"admin\">Admin</label><br />\n");
       print("<input type=\"checkbox\" name=\"admin\" id=\"admin\" value=\"".$user['admin']."\"");
@@ -377,7 +365,7 @@ function editUser() {
       $isAdmin = 0;
     }
 
-    $result = $_SESSION['db']->setUserData($_SESSION['userid'], trim($_POST['login']), trim($_POST['realname']), trim($_POST['email']), trim($_POST['password']), trim($_POST['twitteruser']), trim($_POST['twitterpass']), $isAdmin, trim($_POST['jabberuser']));
+    $result = $_SESSION['db']->setUserData($_SESSION['userid'], trim($_POST['login']), trim($_POST['realname']), trim($_POST['email']), trim($_POST['password']), $isAdmin);
     if ($result) {
       listUsers();
     }
