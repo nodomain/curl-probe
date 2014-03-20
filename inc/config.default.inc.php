@@ -12,21 +12,13 @@ $replyto = "mail@".$hostname;
 
 $maxreplychars = 2048;
 
-$version = "3.0";
+$version = "3.1";
 
 $timeformat = "y/m/d H:i T";
 
 // quiet mode settings
 $startquietmode = "00:00";
 $endquietmode = "00:00";
-
-// jabber settings
-$jabberserver = "jabber.org";
-$jabberport = "5222";
-$jabberuser = "curlprobe";
-$jabberpass = "";
-$jabberdomain = "jabber.org";
-$jabberressource = "vs01";
 
 include_once("config.local.inc.php");
 ?>
