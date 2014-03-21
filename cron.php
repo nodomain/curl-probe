@@ -49,8 +49,7 @@ if (flock($fp, LOCK_EX | LOCK_NB)) { // do an exclusive lock
             // insert entry into events table
             $db->addProbeEvent('error', $sTest->getResult(), $server['id']);
             // mail it
-            $pretext     = "Hello,\nan error occured while probing \"" . $server['name'] . "\" \nwith URL \"" . $server['url'] . "\"\nfor \"" . $server['findstring'] . "\". \n\nThe server replied as follows:\n\n";
-            $posttext    = "\n\nRegards,\nyour faithful curl-probe agent\nat " . $hostname;
+            $text     = "Service: ".$server['name']."\nURL: ".$server['url']."\nString: ".$server['findstring']."\nState: ERROR\n\nDate/Time: ".date($timeformat). "\n\nAdditional Info: \n\n" .$sTest->getResult();
             $status      = $db->setProbeStatus($server['id'], 0);
             //          print ("Error: Servertest for probe '" . $sTest->getTitle() ."' failed!\n");
             $responsible = $db->getAllResponsible($server['id']);
@@ -62,7 +61,7 @@ if (flock($fp, LOCK_EX | LOCK_NB)) { // do an exclusive lock
                 } else {
                   echo "sending mail\n";
                   $mailer = new sendMail($recipient['email'], $mailfrom, $replyto);
-                  $mailer->send($sTest->getTitle() . " - error", $pretext . $sTest->getResult() . $posttext);
+                  $mailer->send("PROBLEM: ". $sTest->getTitle() ." is CRITICAL", $text);
                 }
               }
             } else {
@@ -79,9 +78,7 @@ if (flock($fp, LOCK_EX | LOCK_NB)) { // do an exclusive lock
             $db->addProbeEvent('ok', '', $server['id']);
             $logtime     = $db->getProbeStatusLogtime($server['id']);
             // mail it
-            $pretext     = "Hello,\nthe probe \"" . $server['name'] . "\" with URL \"" . $server['url'] . "\", probing for \"" . $server['findstring'] . "\", has recovered.";
-            $pretext     = $pretext . "\nIt had been on error since " . date($timeformat, strtotime($logtime)) . " (" . round(abs(time() - strtotime($logtime)) / 60, 1) . " minute(s)).";
-            $posttext    = "\n\nRegards,\nyour faithful curl-probe agent\nat " . $hostname;
+            $text        = "Service: ".$server['name']."\nURL: ".$server['url']."\nString: ".$server['findstring']."\nState: OK\n\nDate/Time: ".date($timeformat). "\nSince:".date($timeformat, strtotime($logtime)) . " (" . round(abs(time() - strtotime($logtime)) / 60, 1) . " minute(s))\n\nAdditional Info: \n\n" .$sTest->getResult();
             $status      = $db->setProbeStatus($server['id'], 1);
             //          print ("Error: Servertest for probe '" . $sTest->getTitle() ."' failed!\n");
             $responsible = $db->getAllResponsible($server['id']);
@@ -93,7 +90,7 @@ if (flock($fp, LOCK_EX | LOCK_NB)) { // do an exclusive lock
                 } else {
                   echo "sending mail\n";
                   $mailer = new sendMail($recipient['email'], $mailfrom, $replyto);
-                  $mailer->send($sTest->getTitle() . " - recovered", $pretext . $posttext);
+                  $mailer->send("RECOVERY: ". $sTest->getTitle() ." is OK", $text);
                 }
               }
             } else {

@@ -24,12 +24,16 @@ class sendMail {
     // set headers
     $this->headers = array(
       'From' => $mailfrom,
+      'Return-Path' => $mailfrom,
       'Reply-To' => $replyto,
       'To'   => $this->recipients,
-      'Subject' => '[curl-probe]: ',
+      'Subject' => '',
+      'Date'  => date("r"),
+      'Message-Id' => '<' . str_replace(".","_",uniqid('', true)) . '@' . gethostname() . '>',
       'Content-Type' => 'text/plain',
       'X-Priority' => '1 (Highest)',
       'X-Mailer' => 'PHP ' . phpversion()
+
     );
     
   }
@@ -58,8 +62,7 @@ class sendMail {
   // sendmail function
   public function send($subject, $text){
     // set subject
-    $this->headers['Subject'] .= $subject ." [".date("H:i:s")."]";
-    
+    $this->headers['Subject'] .= $subject; // ." [".date("H:i:s")."]";
     // send mail
     $this->result = $this->mailer->send($this->recipients, $this->headers, $text);  
   }
